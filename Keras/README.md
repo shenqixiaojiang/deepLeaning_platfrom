@@ -15,5 +15,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam',
 ```
 其中top_k_categorical_accuracy，默认是top5。
 
+3、Keras 中图像增强[源码](https://github.com/keras-team/keras-preprocessing/blob/master/keras_preprocessing/image.py)
+
 ## 分类参考链接
 [baidu_dog](https://github.com/ahangchen/keras-dogs)
