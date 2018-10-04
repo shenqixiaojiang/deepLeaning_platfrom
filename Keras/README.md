@@ -15,7 +15,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam',
 ```
 其中top_k_categorical_accuracy，默认是top5。
 
-3、计算F1
+3、keras 计算F1
 ```
 from keras import backend as K
 def f1(y_true, y_pred):
