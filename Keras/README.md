@@ -14,8 +14,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam',
               metrics=['accuracy', top_k_categorical_accuracy, acc_top3])
 ```
 其中top_k_categorical_accuracy，默认是top5。<br>
-* 当load model时，会报错 unkonwn metrics top3_acc: <br>
-* 解决方法：
+* 当load model时，会报错 unkonwn metrics top3_acc，解决方法：
 ```
 model = load_model('saved_models/' +  model_name + '.h5',custom_objects={'top3_acc': top3_acc,'top5_acc': top5_acc})
 ```
