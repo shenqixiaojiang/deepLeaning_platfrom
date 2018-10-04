@@ -7,16 +7,16 @@ biases = model.layers[0].get_weights()[1]
 2、keras 计算top5、top3
 
 ```
-def acc_top3(y_true, y_pred):
+def top3_acc(y_true, y_pred):
     return top_k_categorical_accuracy(y_true, y_pred, k=3)
 
 model.compile(loss='categorical_crossentropy', optimizer='adam',
-              metrics=['accuracy', top_k_categorical_accuracy, acc_top3])
+              metrics=['accuracy', top_k_categorical_accuracy, top3_acc])
 ```
 其中top_k_categorical_accuracy，默认是top5。<br>
 * 当load model时，会报错 unkonwn metrics top3_acc，解决方法：
 ```
-model = load_model('saved_models/' +  model_name + '.h5',custom_objects={'top3_acc': top3_acc,'top5_acc': top5_acc})
+model = load_model('saved_models/' +  model_name + '.h5',custom_objects={'top3_acc': top3_acc})
 ```
 
 3、keras 计算F1
