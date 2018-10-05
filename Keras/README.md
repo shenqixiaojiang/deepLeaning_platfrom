@@ -55,5 +55,8 @@ def f1(y_true, y_pred):
 
 4、Keras 图像增强[源码](https://github.com/keras-team/keras-preprocessing/blob/master/keras_preprocessing/image.py)
 
+## Keras model
+[DenseNet-Keras](https://github.com/flyyufelix/DenseNet-Keras)<br>
+
 ## 分类参考链接
 [baidu_dog](https://github.com/ahangchen/keras-dogs)
