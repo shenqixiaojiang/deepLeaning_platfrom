@@ -48,7 +48,7 @@ opt = 'sgd'
 
 save_dir = os.path.join(os.getcwd(), 'saved_models')
 
-data_path = r'/media/disk1/fordata/shenshiwei/cccccc/zsl/all/'
+data_path = r'./zsl/all/'
 
 try:
     model_name = sys.argv[1]
@@ -183,7 +183,7 @@ o5    = Dense(num_classes, activation='softmax',name='o5')(b5)
 ofuse = Dense(num_classes, activation='softmax',name='ofuse')(fuse)
 
 model = Model(inputs=[input_tensor], outputs=[o1, o2, o3, o4, o5, ofuse])
-filepath = '/home/shenshiwei/.keras/models/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5'
+filepath = '~/.keras/models/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5'
 load_weights_from_hdf5_group_by_name(model, filepath)
 
 batch_size = 24
