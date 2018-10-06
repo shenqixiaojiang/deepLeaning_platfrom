@@ -1,9 +1,4 @@
 # -*- coding: UTF-8 -*-
-# Authorized  by ShenShiWei
-# Created on  2018/9/20 下午12:52
-# Email: shenshiwei11@163.com
-# From kwai, www.kuaishou.com
-# ©2015-2018 All Rights Reserved.
 
 from __future__ import absolute_import
 from __future__ import division
