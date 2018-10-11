@@ -53,6 +53,26 @@ def f1(y_true, y_pred):
     return 2*((precision*recall)/(precision+recall+K.epsilon()))
 ```
 
+各label单独求F1后的均值：
+
+```
+def f1(y_true, y_pred):
+    def recall(y_true, y_pred):
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)),axis=0)
+        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)),axis=0)
+        recall = true_positives / (possible_positives + K.epsilon())
+        return recall
+
+    def precision(y_true, y_pred):
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)),axis=0)
+        predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)),axis=0)
+        precision = true_positives / (predicted_positives + K.epsilon())
+        return precision
+    precision = precision(y_true, y_pred)
+    recall = recall(y_true, y_pred)
+    return K.mean(2*((precision*recall)/(precision+recall+K.epsilon())))
+```
+
 4、Keras 图像增强[源码](https://github.com/keras-team/keras-preprocessing/blob/master/keras_preprocessing/image.py)
 
 ## Keras model
