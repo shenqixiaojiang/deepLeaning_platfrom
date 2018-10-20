@@ -4,4 +4,4 @@
 
 
 ## DF-CCF
-[神气比赛],(https://github.com/PanJianning/2018-shenqi-image-classification)
+[神气比赛](https://github.com/PanJianning/2018-shenqi-image-classification)
