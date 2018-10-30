@@ -77,6 +77,7 @@ def f1(y_true, y_pred):
 
 ## Keras model
 [DenseNet-Keras](https://github.com/flyyufelix/DenseNet-Keras)<br>
+[SE-Net](https://github.com/titu1994/keras-squeeze-excite-network)
 
 ## 分类参考链接
 [baidu_dog](https://github.com/ahangchen/keras-dogs)
