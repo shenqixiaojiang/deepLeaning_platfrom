@@ -1,5 +1,3 @@
-# deepLeaning_platfrom
-Keras, Pytorch, Tensorflow 的使用
-
+### Keras, Pytorch, Tensorflow
 ### [gluon-cv](https://github.com/dmlc/gluon-cv)
 ### [fast.ai](https://www.fast.ai/)
