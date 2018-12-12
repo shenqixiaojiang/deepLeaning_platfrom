@@ -2,7 +2,7 @@
 ### [gluon-cv](https://github.com/dmlc/gluon-cv)
 ### [fast.ai](https://www.fast.ai/)
 
-# 下面是CV相关的开源数据集的整理。
+# 开源数据集
 
 ## Images Analysis
 数据集|介绍|备注|网址
