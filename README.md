@@ -155,8 +155,8 @@ Describable Textures Dataset |texture synthesis(纹理合成)|image num:5640 cat
 KITTI car segmentation|Instance segmentation(样例分割)|image num: 3976 train num: 3712 test num: 144  val:120|[链接](http://www.cvlibs.net/datasets/kitti/eval_semantics.php)
 Cityscapes|Instance segmentation(样例分割)|image num: 5000 train num: 2975 test num: 1525  val:500|[链接](https://www.cityscapes-dataset.com/)
 Sym-PASCAL|Symmetry Detection(对称性检测)|image num: train:648 test:787 object num: 14|[链接](https://github.com/KevinKecc/SRN)
-Color Checker Dataset|Color constancy(颜色恒定)|image num: 568|[链接](http://www.eecs.harvard.edu/~ayanc/oldcc/dbs.html)
-NUS 8-Camera Dataset|Color constancy(颜色恒定)|image num: 1736|[链接](http://www.comp.nus.edu.sg/~whitebal/illuminant/illuminant.html)
+Color Checker Dataset|Color constancy(颜色一致性)|image num: 568|[链接](http://www.eecs.harvard.edu/~ayanc/oldcc/dbs.html)
+NUS 8-Camera Dataset|Color constancy(颜色一致性)|image num: 1736|[链接](http://www.comp.nus.edu.sg/~whitebal/illuminant/illuminant.html)
 
 ## Text
 数据集|介绍|备注|网址
