@@ -75,7 +75,6 @@ YouTube Faces|视频人脸识别|3,425 videos，1595 人|[链接](https://www.cs
 MS-Celeb-1M|视频人脸识别|1,000,000 images，21,000人|[链接](http://www.msceleb.org/download/sampleset)
 MSVD|视频描述|1,970 videos|[链接](http://www.cs.utexas.edu/users/ml/clamp/videoDescription/YouTubeClips.tar)
 MSR-VTT-10K|视频描述|10，000 videos|[链接](http://ms-multimedia-challenge.com/2017/dataset)
-MSR-VTT-10K|视频描述|无|[链接](https://sites.google.com/site/describingmovies/lsmdc-2016/download)
 
 ## 3D Computer Vision
 数据集|介绍|备注|网址
