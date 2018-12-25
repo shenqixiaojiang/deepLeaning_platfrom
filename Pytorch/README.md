@@ -8,3 +8,4 @@
 * [铝材--herbert-chen](https://github.com/herbert-chen/tianchi_lvcai) <br>
 * [mixup-cifar10](https://github.com/facebookresearch/mixup-cifar10) <br>
 * [scene-classification(数据增广和multicrop)](https://github.com/buptchan/scene-classification) <br>
+* [各种模型文件和pretrained model](https://github.com/Cadene/pretrained-models.pytorch)
