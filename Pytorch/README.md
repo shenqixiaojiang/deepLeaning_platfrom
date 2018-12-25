@@ -7,4 +7,4 @@
 [神气比赛开源代码](https://github.com/PanJianning/2018-shenqi-image-classification) <br>
 [铝材--herbert-chen](https://github.com/herbert-chen/tianchi_lvcai) <br>
 [mixup-cifar10](https://github.com/facebookresearch/mixup-cifar10) <br>
-[scene-classification-数据增广和multicrop](https://github.com/buptchan/scene-classification) <br>
+[scene-classification(数据增广和multicrop)](https://github.com/buptchan/scene-classification) <br>
