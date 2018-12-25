@@ -4,7 +4,7 @@
 4、[预训练加载](https://zhuanlan.zhihu.com/p/25980324),支持修改最后一层以及第一层输入 <br>
 
 ## DF-CCF
-[神气比赛开源代码](https://github.com/PanJianning/2018-shenqi-image-classification) <br>
-[铝材--herbert-chen](https://github.com/herbert-chen/tianchi_lvcai) <br>
-[mixup-cifar10](https://github.com/facebookresearch/mixup-cifar10) <br>
-[scene-classification(数据增广和multicrop)](https://github.com/buptchan/scene-classification) <br>
+* [神气比赛开源代码](https://github.com/PanJianning/2018-shenqi-image-classification) <br>
+* [铝材--herbert-chen](https://github.com/herbert-chen/tianchi_lvcai) <br>
+* [mixup-cifar10](https://github.com/facebookresearch/mixup-cifar10) <br>
+* [scene-classification(数据增广和multicrop)](https://github.com/buptchan/scene-classification) <br>
