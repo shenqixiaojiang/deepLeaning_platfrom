@@ -10,7 +10,7 @@ import torch.nn as nn
 from torch.optim import lr_scheduler
 from utils.train_util import train, trainlog
 from utils.other_util import get_mean_and_std,myTensorDataset,process_data
-from utils.data_aug import Compose,RandomHflip,RandomVflip,Normalize,Resize,RandomResizedCrop,CenterCrop,RandomRotate,RandomErasing
+from utils.data_aug import Compose,RandomHflip,RandomVflip,Normalize,Resize,RandomResizedCrop,CenterCrop,RandomRotate,RandomErasing,RandomHVShift
 from models.load_model import load_model
 from  torch.nn import CrossEntropyLoss
 import logging
@@ -27,6 +27,8 @@ parser.add_argument('--mode', default='train', help='[valid,predict,train]')
 parser.add_argument('--trainval', default='valid', help='[train,valid]')
 parser.add_argument('--model', default='resnet50',help='[xception,resnet50,...]')
 parser.add_argument('--width', default=32,type=int,help='width')
+parser.add_argument('--crop_size', default=32,type=int,help='crop_size,[Here crop_size = width]')
+parser.add_argument('--org_size', default=32,type=int,help='org_size')
 parser.add_argument('--batchsize', default=24,type=int,help='batch-size')
 parser.add_argument('--start', default=8,type=int,help='start_channel')
 parser.add_argument('--start_epoch', default=0,type=int,help='start_epoch')
@@ -35,7 +37,7 @@ parser.add_argument('--cn', default=10,type=int,help='channel_number')
 parser.add_argument('--seed', default=666,type=int,help='seed to split data')
 parser.add_argument('--baselr', default=0.001,type=float,help='the init learning rate')
 parser.add_argument('--wd', default=0.0001,type=float,help='the init learning rate')
-parser.add_argument('--optimizer', default='SGD',help='[SGD,Adam]')
+parser.add_argument('--optimizer', default='Adam',help='[SGD,Adam]')
 parser.add_argument('--avg_number', default=1,type=int,help='avg_number to get the new model')
 parser.add_argument('--kfold',default=1,type=int,help='kfold for train')
 parser.add_argument('--mixup',action='store_true',default=False,help='mixup for data')
@@ -51,8 +53,11 @@ opt = parser.parse_args()
 print(opt)
 
 if len(opt.gpus) == 1:
-    gpu_number = len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
-    print("GPU_Number:",gpu_number)
+    try:
+        gpu_number = len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
+        print("GPU_Number:",gpu_number)
+    except:
+        print("GPU_Number: 1")
 else:
     print("GPU_Number:",len(opt.gpus))
 
@@ -64,7 +69,7 @@ torch.backends.cudnn.benchmark = True ##accelerate the training
 torch.backends.cudnn.deterministic = True
 
 batch_size = opt.batchsize
-org_size = opt.width + 32
+org_size = opt.org_size
 target_size = opt.width
 
 if not os.path.exists(opt.save_dir):
@@ -105,15 +110,19 @@ def train_main(x_train,x_test,y_train,y_test,model_times=0):
     else:
       data_transforms = {
         'train' : Compose([
+             #RandomRotate((0,45),bound=True),
              RandomRotate((0,45)),
+             RandomHVShift(),
              RandomHflip(),
              RandomVflip(),
              RandomErasing(),
              #Resize((target_size,target_size)),
              RandomResizedCrop((target_size,target_size)),
+             #Normalize()
          ]),
          'val': Compose([
              Resize((target_size,target_size)),
+             #Normalize()
              #CenterCrop((target_size,target_size)),
          ])
       }

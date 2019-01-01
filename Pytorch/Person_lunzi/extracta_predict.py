@@ -14,7 +14,7 @@ from models.inception_resnet_v2 import inceptionresnetv2
 from torch.optim import lr_scheduler
 from utils.train_util import train, trainlog
 from utils.other_util import get_mean_and_std,myTensorDataset,process_data
-from utils.data_aug import Compose,RandomHflip,RandomVflip,Normalize,Resize
+from utils.data_aug import Compose,RandomHflip,RandomVflip,Normalize,Resize,TwelveCrop
 from  torch.nn import CrossEntropyLoss
 from models.load_model import load_model
 import logging
@@ -33,6 +33,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--mode', default='train', help='[valid,predict,train]')
 parser.add_argument('--model', default='resnet50',help='[xception,resnet50,...]')
 parser.add_argument('--width', default=32,type=int,help='width')
+parser.add_argument('--crop_size', default=32,type=int,help='crop_size,[Here crop_size = width]')
+parser.add_argument('--org_size', default=32,type=int,help='org_size')
 parser.add_argument('--batchsize', default=24,type=int,help='batch-size')
 parser.add_argument('--start', default=8,type=int,help='start_channel')
 parser.add_argument('--cn', default=10,type=int,help='channel_number')
@@ -40,7 +42,7 @@ parser.add_argument('--avg_number', default=1,type=int,help='avg_number to get t
 parser.add_argument('--seed', default=666,type=int,help='seed to split data')
 parser.add_argument('--start_epoch', default=0,type=int,help='start_epoch')
 parser.add_argument('--kfold',default=1,type=int,help='kfold for train')
-parser.add_argument('--crop_five',action='store_true',default=False,help='crop five for predict')
+parser.add_argument('--crop_five',default=1,type=int,help='crop number for predict')
 parser.add_argument('--resume', default='Best',help='fine-tune model')
 parser.add_argument('--gpus', nargs='*', type=int, default=[0],help="How many GPUs to use.")
 parser.add_argument('--process',action='store_true',default=False,help='process for data')
@@ -61,10 +63,12 @@ torch.backends.cudnn.deterministic = True
 def load_data():
 
     batch_size = opt.batchsize
-    org_size = opt.width + 32
+    org_size = opt.org_size
     target_size = opt.width
+    if org_size <= target_size:
+        org_size = target_size + 32    
 
-    if not opt.crop_five:
+    if opt.crop_five == 1:
         if opt.cn == 3:
             test_transforms = transforms.Compose([
               transforms.ToPILImage(),
@@ -79,11 +83,16 @@ def load_data():
             ])
     else:
         print ('five crop...')
-        test_transforms = transforms.Compose([
+        if opt.cn == 3:
+            test_transforms = transforms.Compose([
               transforms.ToPILImage(),
               transforms.FiveCrop(target_size),
               transforms.Lambda(lambda crops: torch.stack([transforms.ToTensor()(crop) for crop in crops]))
-        ])
+            ])
+        else:
+            test_transforms = Compose([
+              TwelveCrop((org_size,org_size),(target_size,target_size),opt.crop_five),
+            ])
 
     if opt.mode == 'valid':
         fid_test = h5py.File(opt.data_path + 'validation.h5','r')
@@ -108,7 +117,10 @@ def load_data():
         s_test = s_test.transpose((0,3,1,2))
         label_test = np.load(opt.data_path + 'label4.npy')
         cls_number = 17
-
+    
+    #s_test = s_test[:3000]
+    #label_test = label_test[:3000]
+    
     # print s_test.shape,label_test.shape
     # if opt.process:
     #     print np.mean(x_train),np.mean(x_test),np.min(x_train),np.min(x_test),np.max(x_train),np.max(x_test)
@@ -133,7 +145,7 @@ def model_predict(data_loader,data_set,cls_number=17,model_times=0):
 
     model,_ = load_model(model_name=opt.model,resume=opt.resume,start_epoch=opt.start_epoch,cn=opt.cn, \
                save_dir=opt.save_dir,width=opt.width,start=opt.start,cls_number=cls_number, \
-               avg_number=opt.avg_number,gpus=opt.gpus,model_times=model_times)
+               avg_number=opt.avg_number,gpus=opt.gpus,model_times=model_times,kfold=opt.kfold,train=False)
 
     model.eval()
 
@@ -154,20 +166,29 @@ def model_predict(data_loader,data_set,cls_number=17,model_times=0):
         #print (inputs.size())
         inputs = Variable(inputs.cuda())
         labels = Variable(torch.from_numpy(np.array(labels)).long().cuda())
+        
         # forward
-        if opt.crop_five:
+        if opt.crop_five > 1 and opt.cn == 3:
             #print inputs.size()
             bs, ncrops, c, h, w = inputs.size()
             result = model(inputs.view(-1, c, h, w))
             outputs = result.view(bs, ncrops, -1).mean(1)
-        else:
+        elif opt.crop_five > 1 and opt.cn > 3:
+            bs, CC , h, w = inputs.size()
+            ncrops = CC // opt.cn
+            result = model(inputs.view(-1, opt.cn, h, w))
+            outputs = result.view(bs, ncrops, -1).mean(1)
+        elif opt.crop_five == 1:
             outputs = model(inputs)
-
+        
+        #print(outputs.size()) 
+        #continue
+         
         # statistics
         if isinstance(outputs, list):
             loss = criterion(outputs[0], labels)
             loss += criterion(outputs[1], labels)
-            outputs = (outputs[0]+outputs[1])/2
+            outputs = (outputs[0]+outputs[1]) / 2
         else:
             loss = criterion(outputs, labels)
         _, preds = torch.max(outputs, 1)

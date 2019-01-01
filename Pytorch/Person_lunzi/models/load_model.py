@@ -29,7 +29,7 @@ from collections import OrderedDict
 import os
 
 def load_model(model_name='resnet50',resume='Best',start_epoch=0,cn=3,
-               save_dir='saved_models/',width=32,start=8,cls_number=10,avg_number=1,gpus=[0,1,2,3,4,5,6,7],kfold = 1,model_times=0):
+               save_dir='saved_models/',width=32,start=8,cls_number=10,avg_number=1,gpus=[0,1,2,3,4,5,6,7],kfold = 1,model_times=0,train=True):
     
     load_dict = None
     #load_dict = True if cn == 3 else None
@@ -99,8 +99,10 @@ def load_model(model_name='resnet50',resume='Best',start_epoch=0,cn=3,
     #print(model)
 
     if '-' not in model_name and load_dict != True:
-      if 'dpn' in model_name:
-        model.features.conv1_1.conv == nn.Conv2d(cn, 96, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+      if model_name in ['dpn98',]:
+        model.features.conv1_1.conv = nn.Conv2d(cn, 96, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+      elif model_name in ['dpn92',]:
+        model.features.conv1_1.conv = nn.Conv2d(cn, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
       elif model_name in ['seresnet20','seresnet32']:
         model.conv1 = nn.Conv2d(cn, 16, kernel_size=3, stride=1, padding=1, bias=False)
       elif model_name in ['seresnet18','seresnet34']:
@@ -148,7 +150,7 @@ def load_model(model_name='resnet50',resume='Best',start_epoch=0,cn=3,
         if len(weight_path) == 0:
             resume = ''
         elif avg_number == 1:
-            resume = weight_path[cur_index[0]]
+            resume = weight_path[0]
         else:
           for cnt,index in zip(range(avg_number),cur_index[:avg_number]):
             cur_resume = weight_path[index]
@@ -162,13 +164,14 @@ def load_model(model_name='resnet50',resume='Best',start_epoch=0,cn=3,
               if cnt == avg_number - 1:
                 new_state_dict[k] = new_state_dict[k] / float(avg_number)
           model.load_state_dict(new_state_dict)
-        for index in cur_index[avg_number + 2:]:
+        if train == False:
+          for index in cur_index[avg_number + 2:]:
             cur_resume = weight_path[index]
             print('remove resume %s ' %cur_resume)
             os.remove(cur_resume)
     if resume != '' and avg_number == 1:
         start_epoch = int(resume.split('-')[-3])
-        print('resuming finetune from %s'%resume)
+        #print('resuming finetune from %s'%resume)
         logging.info('resuming finetune from %s'%resume)
         model.load_state_dict(torch.load(resume))
 
